@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>沪上阿姨奶茶店库存管理系统 - 预览版</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .app-preview {
+      width: 100%;
+      max-width: 400px;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    
+    .app-header {
+      background: linear-gradient(90deg, #FF6B8B 0%, #FF8E53 100%);
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+    
+    .app-header h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    
+    .app-header p {
+      opacity: 0.9;
+      font-size: 14px;
+    }
+    
+    .status-bar {
+      height: 24px;
+      background: rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      font-size: 12px;
+      color: white;
+    }
+    
+    .dashboard {
+      padding: 20px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .stat-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      border-left: 4px solid #FF6B8B;
+    }
+    
+    .stat-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #333;
+      margin: 5px 0;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .navigation {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-top: 1px solid #e0e0e0;
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 10px 5px;
+      background: white;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #333;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .nav-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+    
+    .nav-icon {
+      font-size: 24px;
+      margin-bottom: 5px;
+      color: #FF6B8B;
+    }
+    
+    .nav-label {
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .chart-container {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .chart-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    
+    .chart-bar {
+      height: 20px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .chart-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #FF6B8B 0%, #FF8E53 100%);
+      border-radius: 10px;
+      transition: width 0.5s ease;
+    }
+    
+    .chart-label {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+    
+    .alert {
+      background: #FFF3E0;
+      border-left: 4px solid #FF9800;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #333;
+    }
+    
+    .alert strong {
+      color: #FF6B8B;
+    }
+    
+    .tech-info {
+      background: #f0f7ff;
+      padding: 15px;
+      border-top: 1px solid #e0e0e0;
+    }
+    
+    .tech-info h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    
+    .tech-list {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    .tech-list li {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-preview">
+    <div class="status-bar">
+      <span>沪上阿姨奶茶店</span>
+      <span>9:00</span>
+    </div>
+    
+    <div class="app-header">
+      <h1>库存管理系统</h1>
+      <p>智能订货预测 · 实时库存监控</p>
+    </div>
+    
+    <div class="dashboard">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">¥2,580</div>
+          <div class="stat-label">今日销售额</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">86杯</div>
+          <div class="stat-label">已售杯数</div>
+        </div>
+      </div>
+      
+      <div class="chart-container">
+        <div class="chart-title">库存预警</div>
+        <div class="chart-bar">
+          <div class="chart-fill" style="width: 15%"></div>
+        </div>
+        <div class="chart-label">珍珠 - 库存充足 (85%)</div>
+        
+        <div class="chart-bar">
+          <div class="chart-fill" style="width: 65%"></div>
+        </div>
+        <div class="chart-label">茶叶 - 库存中等 (35%)</div>
+        
+        <div class="chart-bar">
+          <div class="chart-fill" style="width: 85%"></div>
+        </div>
+        <div class="chart-label">布丁 - 库存紧张 (15%)</div>
+      </div>
+      
+      <div class="alert">
+        🚨 <strong>库存预警：</strong>布丁库存不足，建议及时补货！
+      </div>
+      
+      <div class="chart-container">
+        <div class="chart-title">销售排行 (TOP3)</div>
+        <div class="chart-bar">
+          <div class="chart-fill" style="width: 90%"></div>
+        </div>
+        <div class="chart-label">珍珠奶茶 - 38杯</div>
+        
+        <div class="chart-bar">
+          <div class="chart-fill" style="width: 70%"></div>
+        </div>
+        <div class="chart-label">布丁奶茶 - 28杯</div>
+        
+        <div class="chart-bar">
+          <div class="chart-fill" style="width: 60%"></div>
+        </div>
+        <div class="chart-label">芋圆奶茶 - 20杯</div>
+      </div>
+    </div>
+    
+    <div class="navigation">
+      <a href="#" class="nav-item">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">仪表盘</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon">📦</span>
+        <span class="nav-label">库存</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon">💰</span>
+        <span class="nav-label">销售</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon">🤖</span>
+        <span class="nav-label">预测</span>
+      </a>
+    </div>
+    
+    <div class="tech-info">
+      <h3>技术规格</h3>
+      <ul class="tech-list">
+        <li>平台：React Native (iOS/Android)</li>
+        <li>语言：TypeScript</li>
+        <li>UI库：React Native Paper</li>
+        <li>导航：React Navigation</li>
+        <li>图表：React Native Chart Kit</li>
+        <li>状态管理：React Hooks</li>
+      </ul>
+    </div>
+  </div>
+  
+  <script>
+    // 动态更新统计数据
+    function updateStats() {
+      const statValues = document.querySelectorAll('.stat-value');
+      if (statValues.length >= 2) {
+        // 随机生成一些演示数据
+        const todaySales = Math.floor(Math.random() * 1000) + 2000;
+        const cupsSold = Math.floor(Math.random() * 50) + 70;
+        
+        statValues[0].textContent = '¥' + todaySales;
+        statValues[1].textContent = cupsSold + '杯';
+      }
+    }
+    
+    // 每10秒更新一次数据
+    setInterval(updateStats, 10000);
+    
+    // 初始更新
+    setTimeout(updateStats, 1000);
+    
+    // 添加交互效果
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('点击了：' + this.querySelector('.nav-label').textContent);
+      });
+    });
+  </script>
+</body>
+</html>
